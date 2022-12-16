@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Infrastructure.GameLogic
+namespace Infrastructure.GameLogic.Controllers
 {
     public class CameraController : MonoBehaviour
     {

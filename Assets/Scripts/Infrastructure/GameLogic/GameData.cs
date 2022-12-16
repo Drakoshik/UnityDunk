@@ -11,6 +11,24 @@ namespace Infrastructure.GameLogic
 
         private bool _isLightOn = false;
         private bool _isSoundOn = false;
+
+        public GameData(int highScore, int starScore, bool isLightOn, bool isSoundOn)
+        {
+            _highScore = highScore;
+            _starScore = starScore;
+            _isLightOn = isLightOn;
+            _isSoundOn = isSoundOn;
+        }
+
+        private int BoolToInt (bool b) 
+            => (b ? 1 : 0);
+        public void SaveData()
+        {
+            PlayerPrefs.SetInt("HighScore",_highScore);
+            PlayerPrefs.SetInt("StarScore",_starScore);
+            PlayerPrefs.SetInt("IsLightOn",BoolToInt(_isLightOn));
+            PlayerPrefs.SetInt("IsSoundOn",BoolToInt(_isSoundOn));
+        }
         
         public void SetGeneralScore(int value)
         {
@@ -22,9 +40,13 @@ namespace Infrastructure.GameLogic
             return _highScore;
         }
 
-        public void SetStarScore(int valueToPlus)
+        public int GetStarScore()
         {
-            _starScore += valueToPlus;
+            return _starScore;
+        }
+        public void InscreaseStarScore()
+        {
+            _starScore++;
         }
         
         public void SetLight(bool isOn)

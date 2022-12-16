@@ -1,4 +1,5 @@
 using Infrastructure.GameLogic.Canvases;
+using Infrastructure.GameLogic.Controllers;
 using Infrastructure.Services;
 using UnityEngine;
 
@@ -27,7 +28,9 @@ namespace Infrastructure.GameLogic.GameLogicStates.States
                 typeof(LoseCanvas))) as LoseCanvas;
             var canvasChecker = Object.Instantiate(Resources.Load("Prefabs/CanvasChecker",
                 typeof(CanvasChecker))) as CanvasChecker;
-            
+            var starScoreCanvas = Object.Instantiate(Resources.Load("Prefabs/StarCanvas",
+                typeof(StarCanvas))) as StarCanvas;
+
             
             if (canvasChecker != null)
                 canvasChecker.OnCreate(inGameCanvas, menuCanvas, settingsCanvas, loseCanvas);
@@ -36,9 +39,11 @@ namespace Infrastructure.GameLogic.GameLogicStates.States
                 menuCanvas.OnCreate(_serviceLocator.Get<GameData>(),
                     canvasChecker);
 
-            if (settingsCanvas != null) settingsCanvas.OnCreate(_serviceLocator.Get<GameData>());
             if (loseCanvas != null) loseCanvas.OnCreate(canvasChecker, _serviceLocator.Get<GameData>());
             inGameCanvas.OnCreate(canvasChecker);
+            
+            starScoreCanvas.OnCreate(_serviceLocator.Get<GameData>());
+            if (settingsCanvas != null) settingsCanvas.OnCreate(_serviceLocator.Get<GameData>());
 
             if (gameScenario != null)
                 gameScenario.OnCreate(mainBall,

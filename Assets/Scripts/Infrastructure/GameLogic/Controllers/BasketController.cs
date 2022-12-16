@@ -1,15 +1,15 @@
-using System;
 using Infrastructure.GameLogic.Actions;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
-namespace Infrastructure.GameLogic
+namespace Infrastructure.GameLogic.Controllers
 {
     public class BasketController : MonoBehaviour
     {
         [SerializeField] private Transform _basketWeb;
         [SerializeField] private Transform _ballPlace;
+
+        [SerializeField] private StarTrigger _star;
         private Vector2 _startWebScale;
 
         private const float MaxWebScale = .19f;
@@ -26,6 +26,7 @@ namespace Infrastructure.GameLogic
         private Collider2D obj;
         private bool _isEmpty = true;
         private bool _isUsed;
+        
 
         
         private void OnEnable()
@@ -160,6 +161,13 @@ namespace Infrastructure.GameLogic
         private Vector3 GetMousePosition()
         {
             return _camera.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        public void ShowStar()
+        {
+            var chance = Random.Range(0, 100);
+            if(chance > 50)
+                _star.ActivateStar();
         }
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using Infrastructure.GameLogic.Actions;
 using Infrastructure.GameLogic.Canvases;
+using Infrastructure.GameLogic.Controllers;
 using Infrastructure.GameLogic.Pool;
 using TMPro;
 using UnityEngine;
@@ -55,7 +56,6 @@ namespace Infrastructure.GameLogic
 
             _inGameCanvas = inGameCanvas;
             _canvasChecker = canvasChecker;
-            
             PrepareGame();
         }
 
@@ -89,7 +89,7 @@ namespace Infrastructure.GameLogic
             _activeBasket.transform.position = _spawnPlaces[_activeSpawnIndex].transform.position;
             _activeBasket.transform.rotation = Quaternion.identity;
             var newSpawnIndex = 0;
-
+            _activeBasket.ShowStar();
             while (newSpawnIndex == _activeSpawnIndex)
             {
                 newSpawnIndex = Random.Range(0, _spawnPlaces.Length);

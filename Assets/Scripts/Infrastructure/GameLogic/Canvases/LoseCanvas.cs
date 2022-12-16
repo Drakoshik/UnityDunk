@@ -35,6 +35,7 @@ public class LoseCanvas : MonoBehaviour
 
     private void OnDisable()
     {
+        _gameData.SaveData();
         _againButton.onClick.RemoveAllListeners();
     }
 }

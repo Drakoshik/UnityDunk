@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Infrastructure.GameLogic
+namespace Infrastructure.GameLogic.Controllers
 {
     public class BallController : MonoBehaviour
     {
@@ -14,6 +14,7 @@ namespace Infrastructure.GameLogic
 
         [SerializeField] private  float _blindZone = 1f;
         [SerializeField] private  float _maxTensionZone = 2.5f;
+        
         
         private Camera _camera;
         private Vector2 _startMousePoint;
@@ -30,13 +31,14 @@ namespace Infrastructure.GameLogic
 
         private bool _inFlight = false;
 
+        private AudioSource _audioSource;
 
         private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
 
         private void Start()
         {
             _camera = Camera.main;
-
+            _audioSource = GetComponent<AudioSource>();
             CreatePredictionPointsPool();
 
             _predictionBall = Instantiate(_ballPrediction);
@@ -177,6 +179,11 @@ namespace Infrastructure.GameLogic
         private Vector3 GetMousePosition()
         {
             return _camera.ScreenToWorldPoint(Input.mousePosition);
+        }
+
+        private void OnCollisionEnter2D(Collision2D col)
+        {
+            _audioSource.Play();
         }
     }
 }

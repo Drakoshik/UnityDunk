@@ -14,18 +14,22 @@ namespace Infrastructure.GameLogic
         [SerializeField] private Button _soundButton;
         [SerializeField] private Button _backButton;
 
+        private AudioSource _audioSource;
+
         private GameData _gameData;
 
         public void OnCreate(GameData gameData)
         {
             _gameData = gameData;
-            CheckSound();
+            var isOn = _gameData.GetLight();
+            CheckSound(isOn);
+            _audioSource = GetComponent<AudioSource>();
         }
         
         private void OnEnable()
         {
             _lightButton.onClick.AddListener(ChangeLight);
-            _soundButton.onClick.AddListener(CheckSound);
+            _soundButton.onClick.AddListener(ChangeSound);
             _backButton.onClick.AddListener(Hide);
             
         }
@@ -59,13 +63,17 @@ namespace Infrastructure.GameLogic
             LightAction.OnLight(isOn);
             _gameData.SetLight(!isOn);
         }
-        private void CheckSound()
+        private void ChangeSound()
         {
             var isOn = _gameData.GetLight();
-            _sound.SetActive(isOn);
-
-            LightAction.OnLight(isOn);
+            CheckSound(isOn);
             _gameData.SetLight(!isOn);
+        }
+
+        private void CheckSound(bool isOn)
+        {
+            AudioListener.volume = isOn ? 0 : 1;
+            _sound.SetActive(!isOn);
         }
     }
 }
