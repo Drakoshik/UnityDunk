@@ -28,6 +28,8 @@ namespace Infrastructure.GameLogic
         private GameObject _predictionBall;
         private Rigidbody2D _predictionBallPhysics;
 
+        private bool _inFlight = false;
+
 
         private void Awake() => _rigidbody = GetComponent<Rigidbody2D>();
 
@@ -44,6 +46,8 @@ namespace Infrastructure.GameLogic
 
         private void OnTriggerEnter2D(Collider2D col)
         {
+            if (!col.GetComponent<BasketController>()) return;
+            _inFlight = false;
             _rigidbody.constraints = RigidbodyConstraints2D.FreezeAll;
         }
 
@@ -77,6 +81,8 @@ namespace Infrastructure.GameLogic
 
         private void OnInput()
         {
+            
+            if (_inFlight) return;
             if (Input.GetMouseButtonDown(0))
             {
                 _startMousePoint = GetMousePosition();
@@ -89,56 +95,65 @@ namespace Infrastructure.GameLogic
             if (Input.GetMouseButton(0))
             {
                 Vector2 dragPosition = GetMousePosition();
-                var power = _startMousePoint - dragPosition;
-                
-                var currentDistance = Vector2.Distance(_startMousePoint, dragPosition);
-                if (currentDistance > _maxTensionZone) 
-                    power = GetPowerInBounds(power, _maxTensionZone);
-                
-                foreach (var point in _activePoints)
-                {
-                    SetPointAlpha(point, 0);
-                }
-                
-                if (currentDistance > _blindZone)
-                {
-                    foreach (var point in _activePoints)
-                    {
-                        SetPointAlpha(point, currentDistance - _blindZone);
-                    }
-                    _predictionBall.SetActive(true);
-                    _predictionBall.transform.position = transform.position;
-                    _predictionBallPhysics.AddForce(power * _powerIncrease,
-                        ForceMode2D.Force);
-                
-                    Physics2D.simulationMode = SimulationMode2D.Script;
-                    foreach (var point in _points)
-                    {
-                        Physics2D.Simulate(Time.fixedDeltaTime);
-                        point.transform.position = 
-                            _predictionBall.transform.position;
-                    }
-                    Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
-                
-                    _predictionBall.SetActive(false);
-                }
+                TrajectoryControlCheck(dragPosition);
             }
             
             if (Input.GetMouseButtonUp(0))
             {
                 _endMousePoint = GetMousePosition();
-                _rigidbody.constraints = RigidbodyConstraints2D.None;
 
                 var power = _startMousePoint - _endMousePoint;
                 var currentDistance = Vector2.Distance(_startMousePoint, _endMousePoint);
+                if (currentDistance > _maxTensionZone) 
+                    power = GetPowerInBounds(power, _maxTensionZone);
                 foreach (var point in _activePoints)
                 {
                     point.gameObject.SetActive(false);
                     SetPointAlpha(point, 0);
                 }
                 if (currentDistance < _blindZone) return;
+                _inFlight = true;
                 _rigidbody.constraints = RigidbodyConstraints2D.None;
                 _rigidbody.AddForce(power * _powerIncrease, ForceMode2D.Force);
+            }
+        }
+
+        private void TrajectoryControlCheck(Vector2 dragPosition)
+        {
+            var power = _startMousePoint - dragPosition;
+
+            var currentDistance = Vector2.Distance(_startMousePoint, dragPosition);
+            if (currentDistance > _maxTensionZone)
+                power = GetPowerInBounds(power, _maxTensionZone);
+
+            foreach (var point in _activePoints)
+            {
+                SetPointAlpha(point, 0);
+            }
+
+            if (currentDistance > _blindZone)
+            {
+                foreach (var point in _activePoints)
+                {
+                    SetPointAlpha(point, currentDistance - _blindZone);
+                }
+
+                _predictionBall.SetActive(true);
+                _predictionBall.transform.position = transform.position;
+                _predictionBallPhysics.AddForce(power * _powerIncrease,
+                    ForceMode2D.Force);
+
+                Physics2D.simulationMode = SimulationMode2D.Script;
+                foreach (var point in _points)
+                {
+                    Physics2D.Simulate(Time.fixedDeltaTime);
+                    point.transform.position =
+                        _predictionBall.transform.position;
+                }
+
+                Physics2D.simulationMode = SimulationMode2D.FixedUpdate;
+
+                _predictionBall.SetActive(false);
             }
         }
 

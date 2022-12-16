@@ -1,4 +1,5 @@
 using System;
+using Infrastructure.GameLogic.Actions;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -24,11 +25,20 @@ namespace Infrastructure.GameLogic
 
         private Collider2D obj;
         private bool _isEmpty = true;
+        private bool _isUsed;
 
         
         private void OnEnable()
         {
             _isEmpty = true;
+            _isUsed = false;
+        }
+
+        private void OnDisable()
+        {
+            _isEmpty = true;
+            _isUsed = false;
+            _isActive = false;
         }
 
         private void Start()
@@ -74,7 +84,9 @@ namespace Infrastructure.GameLogic
             _isActive = true;
             obj = col;
             _isEmpty = false;
-            BallAction.OnBallCatch();
+            if(!_isUsed)
+                BallAction.OnBallCatch();
+            _isUsed = true;
         }
         
         private void OnTriggerStay2D(Collider2D col)
@@ -84,6 +96,11 @@ namespace Infrastructure.GameLogic
             _isEmpty = true;
             _isActive = false;
 
+        }
+
+        public bool GetIsActive()
+        {
+            return _isActive;
         }
 
         #region ChangeBasketMethods

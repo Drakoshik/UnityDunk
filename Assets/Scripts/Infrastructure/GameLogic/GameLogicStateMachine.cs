@@ -14,9 +14,7 @@ namespace Infrastructure.GameLogic
             {
                 [typeof(BootstrapState)] = new BootstrapState(this, serviceLocator),
                 [typeof(InitializeState)] = new InitializeState(this, serviceLocator),
-                [typeof(MenuState)] = new MenuState(this, serviceLocator),
                 [typeof(GameState)] = new GameState(this, serviceLocator),
-                [typeof(LoseState)] = new LoseState(this, serviceLocator)
             };
         }
     }
