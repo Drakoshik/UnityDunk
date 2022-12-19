@@ -47,10 +47,15 @@ namespace Infrastructure.GameLogic.Controllers
             _camera = Camera.main;
             _startWebScale = _basketWeb.transform.localScale;
         }
+        
 
         private void Update()
         {
             if(!_isActive) return;
+            
+            if (!_isEmpty)
+                obj.transform.position = Vector2.MoveTowards(obj.transform.position,
+                    _ballPlace.position, Time.deltaTime * 2f);
             
 #if UNITY_ANDROID
             if(Input.touchCount <= 0) return;
@@ -99,9 +104,7 @@ namespace Infrastructure.GameLogic.Controllers
             }
 #endif
 
-            if (!_isEmpty)
-                obj.transform.position = Vector2.MoveTowards(obj.transform.position,
-                    _ballPlace.position, Time.deltaTime * 2f);
+            
 
         }
 
