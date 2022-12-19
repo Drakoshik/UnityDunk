@@ -1,9 +1,6 @@
-using System;
 using Infrastructure.GameLogic.Actions;
-using Infrastructure.GameLogic.GameLogicStates.States;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Windows.WebCam;
 
 namespace Infrastructure.GameLogic
 {
