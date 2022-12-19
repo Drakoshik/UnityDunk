@@ -51,6 +51,32 @@ namespace Infrastructure.GameLogic.Controllers
         private void Update()
         {
             if(!_isActive) return;
+            
+#if UNITY_ANDROID
+            if(Input.touchCount <= 0) return;
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            {
+                _startMousePoint = GetTouchPosition();
+                _currentPower = 1;
+            }
+            
+            if (Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                Vector2 dragPosition = GetTouchPosition();
+
+                if(Vector2.Distance(_startMousePoint,
+                       dragPosition) == 0) return;
+                
+                SetBasketRotation(dragPosition);
+                SetWebScale(dragPosition);
+            }
+            
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                _basketWeb.transform.localScale = _startWebScale;
+            }
+            
+#else
             if (Input.GetMouseButtonDown(0))
             {
                 _startMousePoint = GetMousePosition();
@@ -71,6 +97,7 @@ namespace Infrastructure.GameLogic.Controllers
             {
                 _basketWeb.transform.localScale = _startWebScale;
             }
+#endif
 
             if (!_isEmpty)
                 obj.transform.position = Vector2.MoveTowards(obj.transform.position,
@@ -162,7 +189,11 @@ namespace Infrastructure.GameLogic.Controllers
         {
             return _camera.ScreenToWorldPoint(Input.mousePosition);
         }
-
+        
+        private Vector3 GetTouchPosition()
+        {
+            return _camera.ScreenToWorldPoint(Input.GetTouch(0).position);
+        }
         public void ShowStar()
         {
             var chance = Random.Range(0, 100);
