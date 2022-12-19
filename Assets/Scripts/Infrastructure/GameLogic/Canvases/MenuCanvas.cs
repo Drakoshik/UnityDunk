@@ -49,7 +49,6 @@ namespace Infrastructure.GameLogic
 
         private void HideMenu()
         {
-            Debug.Log("sd;rkjgn");
             _canvasChecker.SetState(CanvasState.GameState);
             gameObject.SetActive(false);
         }
