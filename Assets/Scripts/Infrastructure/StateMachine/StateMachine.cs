@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Mono.CompilerServices.SymbolWriter;
-using Unity.VisualScripting;
-using UnityEngine;
 
 namespace Infrastructure.StateMachine
 {

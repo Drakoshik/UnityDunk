@@ -57,31 +57,32 @@ namespace Infrastructure.GameLogic.Controllers
                 obj.transform.position = Vector2.MoveTowards(obj.transform.position,
                     _ballPlace.position, Time.deltaTime * 2f);
             
-#if UNITY_ANDROID
-            if(Input.touchCount <= 0) return;
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                _startMousePoint = GetTouchPosition();
-                _currentPower = 1;
-            }
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                Vector2 dragPosition = GetTouchPosition();
+// #if UNITY_ANDROID
+//             if(Input.touchCount <= 0) return;
+//             if (Input.GetTouch(0).phase == TouchPhase.Began)
+//             {
+//                 _startMousePoint = GetTouchPosition();
+//                 _currentPower = 1;
+//             }
+//             
+//             if (Input.GetTouch(0).phase == TouchPhase.Moved)
+//             {
+//                 Vector2 dragPosition = GetTouchPosition();
+//             
+//                 if(Vector2.Distance(_startMousePoint,
+//                        dragPosition) == 0) return;
+//                 
+//                 SetBasketRotation(dragPosition);
+//                 SetWebScale(dragPosition);
+//             }
+//             
+//             if (Input.GetTouch(0).phase == TouchPhase.Ended)
+//             {
+//                 _basketWeb.transform.localScale = _startWebScale;
+//             }
+//             
+// #else
 
-                if(Vector2.Distance(_startMousePoint,
-                       dragPosition) == 0) return;
-                
-                SetBasketRotation(dragPosition);
-                SetWebScale(dragPosition);
-            }
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                _basketWeb.transform.localScale = _startWebScale;
-            }
-            
-#else
             if (Input.GetMouseButtonDown(0))
             {
                 _startMousePoint = GetMousePosition();
@@ -102,9 +103,9 @@ namespace Infrastructure.GameLogic.Controllers
             {
                 _basketWeb.transform.localScale = _startWebScale;
             }
-#endif
 
-            
+
+// #endif
 
         }
 
@@ -150,28 +151,25 @@ namespace Infrastructure.GameLogic.Controllers
         {
             var currentDistance = 1 + (Vector2.Distance(_startMousePoint,
                 dragPosition) / 10);
-                
-                
-            switch (currentDistance * MinWebScale)
+            if (currentDistance * MinWebScale > MaxWebScale || currentDistance * MinWebScale < MinWebScale)
             {
-                case > MaxWebScale:
+                if (currentDistance * MinWebScale > MaxWebScale)
                 {
                     ChangeWebScales(MaxWebScale);
                     return;
                 }
-                case < MinWebScale:
+                if (currentDistance * MinWebScale < MaxWebScale)
                 {
                     ChangeWebScales(MinWebScale);
                     return;
                 }
-                default:
+            }
+            else
+            {
+                if (currentDistance != _currentPower)
                 {
-                    if (currentDistance != _currentPower)
-                    {
-                        ChangeWebScales(currentDistance * MinWebScale);
-                        _currentPower = currentDistance;
-                    }
-                    break;
+                    ChangeWebScales(currentDistance * MinWebScale);
+                    _currentPower = currentDistance;
                 }
             }
         }

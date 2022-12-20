@@ -86,43 +86,43 @@ namespace Infrastructure.GameLogic.Controllers
             
             if (_inFlight) return;
 
-#if UNITY_ANDROID
-            if(Input.touchCount <= 0) return;
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
-            {
-                _startMousePoint = GetTouchPosition();
-                foreach (var point in _activePoints)
-                {
-                    point.gameObject.SetActive(true);
-                }
-            }
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            {
-                Vector2 dragPosition = GetTouchPosition();
-                TrajectoryControlCheck(dragPosition);
-            }
-            
-            if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            {
-                _endMousePoint = GetTouchPosition();
-
-                var power = _startMousePoint - _endMousePoint;
-                var currentDistance = Vector2.Distance(_startMousePoint, _endMousePoint);
-                if (currentDistance > _maxTensionZone) 
-                    power = GetPowerInBounds(power, _maxTensionZone);
-                foreach (var point in _activePoints)
-                {
-                    point.gameObject.SetActive(false);
-                    SetPointAlpha(point, 0);
-                }
-                if (currentDistance < _blindZone) return;
-                _inFlight = true;
-                _rigidbody.constraints = RigidbodyConstraints2D.None;
-                _rigidbody.AddForce(power * _powerIncrease, ForceMode2D.Force);
-            }
-            
-            #else
+// #if UNITY_ANDROID
+//             if(Input.touchCount <= 0) return;
+//             if (Input.GetTouch(0).phase == TouchPhase.Began)
+//             {
+//                 _startMousePoint = GetTouchPosition();
+//                 foreach (var point in _activePoints)
+//                 {
+//                     point.gameObject.SetActive(true);
+//                 }
+//             }
+//             
+//             if (Input.GetTouch(0).phase == TouchPhase.Moved)
+//             {
+//                 Vector2 dragPosition = GetTouchPosition();
+//                 TrajectoryControlCheck(dragPosition);
+//             }
+//             
+//             if (Input.GetTouch(0).phase == TouchPhase.Ended)
+//             {
+//                 _endMousePoint = GetTouchPosition();
+//
+//                 var power = _startMousePoint - _endMousePoint;
+//                 var currentDistance = Vector2.Distance(_startMousePoint, _endMousePoint);
+//                 if (currentDistance > _maxTensionZone) 
+//                     power = GetPowerInBounds(power, _maxTensionZone);
+//                 foreach (var point in _activePoints)
+//                 {
+//                     point.gameObject.SetActive(false);
+//                     SetPointAlpha(point, 0);
+//                 }
+//                 if (currentDistance < _blindZone) return;
+//                 _inFlight = true;
+//                 _rigidbody.constraints = RigidbodyConstraints2D.None;
+//                 _rigidbody.AddForce(power * _powerIncrease, ForceMode2D.Force);
+//             }
+//             
+//             #else
             
             if (Input.GetMouseButtonDown(0))
             {
@@ -157,7 +157,7 @@ namespace Infrastructure.GameLogic.Controllers
                 _rigidbody.constraints = RigidbodyConstraints2D.None;
                 _rigidbody.AddForce(power * _powerIncrease, ForceMode2D.Force);
             }
-#endif
+// #endif
         }
             
             

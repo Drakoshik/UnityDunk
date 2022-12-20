@@ -22,6 +22,7 @@ namespace Infrastructure.GameLogic
             _canvasChecker = canvasChecker;
             var isOn = _gameData.GetLight();
             CheckLight(isOn);
+            LightAction.OnLight(isOn);
         }
         
         private void OnEnable()
@@ -54,22 +55,23 @@ namespace Infrastructure.GameLogic
             var isOn = _gameData.GetLight();
             CheckLight(isOn);
             _gameData.SetLight(!isOn);
+            LightAction.OnLight(isOn);
         }
 
         private void CheckLight(bool isOn)
         {
             if (isOn)
             {
-                _lightOnImage.SetActive(false);
-                _lightOffImage.SetActive(true);
-            }
-            else
-            {
                 _lightOnImage.SetActive(true);
                 _lightOffImage.SetActive(false);
             }
+            else
+            {
+                _lightOnImage.SetActive(false);
+                _lightOffImage.SetActive(true);
+            }
 
-            LightAction.OnLight(isOn);
+            
         }
     }
 }

@@ -19,13 +19,13 @@ public class BackGroundChecker : MonoBehaviour
     {
         if (isOn)
         {
-            _blackBackground.SetActive(false);
-            _whiteBackground.SetActive(true);
+            _blackBackground.SetActive(true);
+            _whiteBackground.SetActive(false);
         }
         else
         {
-            _blackBackground.SetActive(true);
-            _whiteBackground.SetActive(false);
+            _blackBackground.SetActive(false);
+            _whiteBackground.SetActive(true);
         }
     }
 }
