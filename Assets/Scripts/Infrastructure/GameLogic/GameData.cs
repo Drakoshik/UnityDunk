@@ -9,8 +9,8 @@ namespace Infrastructure.GameLogic
         private int _highScore;
         private int _starScore;
 
-        private bool _isLightOn = false;
-        private bool _isSoundOn = false;
+        private bool _isLightOn;
+        private bool _isSoundOn;
 
         public GameData(int highScore, int starScore, bool isLightOn, bool isSoundOn)
         {
@@ -33,6 +33,7 @@ namespace Infrastructure.GameLogic
         public void SetGeneralScore(int value)
         {
             _generalScore = value;
+            SaveData();
         }
         public int GetHighScore()
         {
@@ -47,11 +48,13 @@ namespace Infrastructure.GameLogic
         public void InscreaseStarScore()
         {
             _starScore++;
+            SaveData();
         }
         
         public void SetLight(bool isOn)
         {
             _isLightOn = isOn;
+            SaveData();
         }
         public bool GetLight()
         {
@@ -59,7 +62,8 @@ namespace Infrastructure.GameLogic
         }
         public void SetSound(bool isOn)
         {
-            _isLightOn = isOn;
+            _isSoundOn = isOn;
+            SaveData();
         }
         public bool GetSound()
         {

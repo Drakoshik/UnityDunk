@@ -30,6 +30,7 @@ namespace Infrastructure.GameLogic
             _lightButton.onClick.AddListener(ChangeLight);
             _hideMenu.onClick.AddListener(HideMenu);
             _settingsButton.onClick.AddListener(ShowMenu);
+            LightAction.OnLight += CheckLight;
         }
 
         private void ShowMenu()
@@ -42,6 +43,7 @@ namespace Infrastructure.GameLogic
             _lightButton.onClick.RemoveAllListeners();
             _hideMenu.onClick.RemoveAllListeners();
             _settingsButton.onClick.RemoveAllListeners();
+            LightAction.OnLight -= CheckLight;
         }
 
 
@@ -52,9 +54,9 @@ namespace Infrastructure.GameLogic
         }
         private void ChangeLight()
         {
-            var isOn = _gameData.GetLight();
+            var isOn = !_gameData.GetLight();
             CheckLight(isOn);
-            _gameData.SetLight(!isOn);
+            _gameData.SetLight(isOn);
             LightAction.OnLight(isOn);
         }
 

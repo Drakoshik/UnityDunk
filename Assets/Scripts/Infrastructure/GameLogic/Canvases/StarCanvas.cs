@@ -20,7 +20,6 @@ namespace Infrastructure.GameLogic.Canvases
         private void SetScore()
         {
             _gameData.InscreaseStarScore();
-            _gameData.SaveData();
             _starText.text = _gameData.GetStarScore().ToString();
         }
     }
