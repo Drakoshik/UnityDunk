@@ -21,8 +21,7 @@ namespace Infrastructure.GameLogic
         public void OnCreate(GameData gameData)
         {
             _gameData = gameData;
-            var isOn = _gameData.GetSound();
-            CheckSound(isOn);
+            CheckSound(_gameData.GetSound());
             _audioSource = GetComponent<AudioSource>();
         }
         
@@ -31,7 +30,6 @@ namespace Infrastructure.GameLogic
             _lightButton.onClick.AddListener(ChangeLight);
             _soundButton.onClick.AddListener(ChangeSound);
             _backButton.onClick.AddListener(Hide);
-            
         }
 
         private void OnDisable()
@@ -49,6 +47,15 @@ namespace Infrastructure.GameLogic
         private void ChangeLight()
         {
             var isOn = !_gameData.GetLight();
+            
+            CheckLight(isOn);
+
+            LightAction.OnLight(isOn);
+            _gameData.SetLight(isOn);
+        }
+
+        private void CheckLight(bool isOn)
+        {
             if (isOn)
             {
                 _lightOnImage.SetActive(false);
@@ -59,10 +66,8 @@ namespace Infrastructure.GameLogic
                 _lightOnImage.SetActive(true);
                 _lightOffImage.SetActive(false);
             }
-
-            LightAction.OnLight(isOn);
-            _gameData.SetLight(isOn);
         }
+
         private void ChangeSound()
         {
             var isOn = !_gameData.GetSound();
