@@ -14,28 +14,10 @@ namespace Infrastructure.GameLogic.GameLogicStates.States
 
             RegisterServices();
         }
-
-        private bool IntToBool (int n) 
-            => n == 1;
         
         private void RegisterServices()
         {
-
-            var highScore = 1;
-            if (PlayerPrefs.HasKey("HighScore"))
-                highScore = PlayerPrefs.GetInt("HighScore");
-            var starScore = 1;
-            if (PlayerPrefs.HasKey("StarScore"))
-                starScore = PlayerPrefs.GetInt("StarScore");
-            var isLightOn = false;
-            if (PlayerPrefs.HasKey("IsLightOn"))
-                isLightOn = IntToBool(PlayerPrefs.GetInt("IsLightOn"));
-            var isSoundOn = false;
-            if (PlayerPrefs.HasKey("IsSoundOn"))
-                isSoundOn = IntToBool(PlayerPrefs.GetInt("IsSoundOn"));
-                
-            
-            var gameData = new GameData(highScore,starScore, isLightOn,isSoundOn);
+            var gameData = LocalDataManager.Load<GameData>();
 
             _serviceLocator.Register(gameData);
         }

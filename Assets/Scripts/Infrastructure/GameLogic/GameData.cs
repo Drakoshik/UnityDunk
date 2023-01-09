@@ -1,16 +1,18 @@
+using System;
 using Infrastructure.Services;
 using UnityEngine;
 
 namespace Infrastructure.GameLogic
 {
+    [Serializable]
     public class GameData : IService
     {
         private int _generalScore;
-        private int _highScore;
-        private int _starScore;
+        [SerializeField] private int _highScore;
+        [SerializeField] private int _starScore;
 
-        private bool _isLightOn;
-        private bool _isSoundOn;
+        [SerializeField] private bool _isLightOn;
+        [SerializeField] private bool _isSoundOn;
 
         public GameData(int highScore, int starScore, bool isLightOn, bool isSoundOn)
         {
@@ -19,15 +21,10 @@ namespace Infrastructure.GameLogic
             _isLightOn = isLightOn;
             _isSoundOn = isSoundOn;
         }
-
-        private int BoolToInt (bool b) 
-            => (b ? 1 : 0);
+        
         public void SaveData()
         {
-            PlayerPrefs.SetInt("HighScore",_highScore);
-            PlayerPrefs.SetInt("StarScore",_starScore);
-            PlayerPrefs.SetInt("IsLightOn",BoolToInt(_isLightOn));
-            PlayerPrefs.SetInt("IsSoundOn",BoolToInt(_isSoundOn));
+            LocalDataManager.Save(this);
         }
         
         public void SetGeneralScore(int value)

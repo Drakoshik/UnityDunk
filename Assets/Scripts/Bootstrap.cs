@@ -6,8 +6,7 @@ using UnityEngine;
 public class Bootstrap : MonoBehaviour
 {
     private void Awake() => Init();
-
-    private IService qwe;
+    
     private void Init()
     {
         DontDestroyOnLoad(gameObject);
